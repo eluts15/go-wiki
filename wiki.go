@@ -6,7 +6,10 @@ import (
 )
 
 func main() {
-	fmt.Println("vim-go")
+	p1 := &Page{Title: "TestPage", Body: []byte("Sick test page bro. Love me.")}
+	p1.save()
+	p2, _ := loadPage("TestPage")
+	fmt.Println(string(p2.Body))
 }
 
 // Describes how page data will be stored in memory.
@@ -23,9 +26,11 @@ func (p *Page) save() error {
 }
 
 // A function for loading pages.
-func loadPage(title string) *Page {
+// Functions can return multiple values, and just toss out the uneeded value(through use of the blank identifer).
+// In this case if it returns nil, than it was successful.
+func loadPage(title string) (*Page, error) {
 	filename := title + ".txt"
-	body, _ := ioutil.ReadFile(filename)
+	body, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
